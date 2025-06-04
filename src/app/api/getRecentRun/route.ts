@@ -1,7 +1,7 @@
 // src/pages/api/getRecentRun.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   const { region = 'us', realm, name } = req.query;
 
   if (!realm || !name) {
