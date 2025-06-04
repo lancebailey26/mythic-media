@@ -64,6 +64,7 @@ async function getCharacterRenderURL(realmSlug: string, characterName: string, r
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    console.log('Received request:', req.method, req.body);
     if (req.method !== 'POST') return res.status(405).end();
 
     const { name, realm, region = 'us' } = req.body;
