@@ -10,9 +10,9 @@ export default function Nav() {
           <li>
             <Link href="/" className="hover:text-white transition">Generate</Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="/upload" className="hover:text-white transition">Upload</Link>
-          </li>
+          </li> */}
         </ul>
       </div>
     </nav>
