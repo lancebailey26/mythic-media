@@ -18,7 +18,7 @@ export default function Home() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('api/generateThumbnails', {
+      const res = await fetch('/api/generateThumbnails', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, realm, region })

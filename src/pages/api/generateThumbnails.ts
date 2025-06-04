@@ -1,7 +1,8 @@
 // src/pages/api/generateThumbnails.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createCanvas, loadImage, registerFont } from 'canvas';
-registerFont('./public/fonts/expressway.ttf', { family: 'Expressway' });
+import path from 'path';
+registerFont(path.resolve('./src/fonts/expressway.ttf'), { family: 'Expressway' });
 const classColorMap: Record<string, string> = {
     "Death Knight": "#C41F3B",
     "Demon Hunter": "#A330C9",
@@ -57,10 +58,14 @@ async function getCharacterRenderURL(realmSlug: string, characterName: string, r
         throw new Error(`Blizzard API error (${res.status}): ${errText}`);
     }
 
-    const data = await res.json();
-    const mainRaw = data.assets?.find((a: { key: string; value: string }) => a.key === 'main-raw');
-    if (!mainRaw) throw new Error('main-raw image not found in character media');
-    return mainRaw.value;
+    if (res.headers.get('content-type')?.includes('application/json')) {
+        const data = await res.json();
+        const mainRaw = data.assets?.find((a: { key: string; value: string }) => a.key === 'main-raw');
+        if (!mainRaw) throw new Error('main-raw image not found in character media');
+        return mainRaw.value;      } else {
+        const text = await res.text();
+        throw new Error(`Expected JSON but got: ${text}`);
+      }
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
