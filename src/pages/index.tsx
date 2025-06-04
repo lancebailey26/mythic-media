@@ -27,6 +27,7 @@ export default function Home() {
       if (res.ok) setResults(data);
       else setError(data.error || 'Something went wrong.');
     } catch (e) {
+      console.error('Error generating thumbnails:', e);
       setError('Failed to generate thumbnails.');
     } finally {
       setLoading(false);
