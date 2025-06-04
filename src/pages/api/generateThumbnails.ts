@@ -58,7 +58,7 @@ async function getCharacterRenderURL(realmSlug: string, characterName: string, r
     }
 
     const data = await res.json();
-    const mainRaw = data.assets?.find((a: any) => a.key === 'main-raw');
+    const mainRaw = data.assets?.find((a: { key: string; value: string }) => a.key === 'main-raw');
     if (!mainRaw) throw new Error('main-raw image not found in character media');
     return mainRaw.value;
 }

@@ -1,12 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
+type Thumbnail = { imageBase64: string };
 
 export default function Home() {
   const [name, setName] = useState('');
   const [realm, setRealm] = useState('');
   const [region, setRegion] = useState('us');
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Thumbnail[]>([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
