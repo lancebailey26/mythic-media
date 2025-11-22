@@ -1,11 +1,13 @@
-// src/pages/api/getRecentRun.ts
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
-  const { region = 'us', realm, name } = req.query;
+export async function POST(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const region = searchParams.get('region') || 'us';
+  const realm = searchParams.get('realm');
+  const name = searchParams.get('name');
 
   if (!realm || !name) {
-    return res.status(400).json({ error: 'Missing realm or name' });
+    return NextResponse.json({ error: 'Missing realm or name' }, { status: 400 });
   }
 
   try {
@@ -17,9 +19,11 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const data = await response.json();
 
     const recentRun = data?.mythic_plus_recent_runs?.[0];
-    if (!recentRun) return res.status(404).json({ error: 'No recent runs found' });
+    if (!recentRun) {
+      return NextResponse.json({ error: 'No recent runs found' }, { status: 404 });
+    }
 
-    res.status(200).json({
+    return NextResponse.json({
       characterName: data.name,
       class: data.class,
       spec: data.active_spec_name,
@@ -30,6 +34,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       run: recentRun
     });
   } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }
